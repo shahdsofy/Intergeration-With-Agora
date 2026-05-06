@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intergeration With Agora", "Intergeration With Agora\Intergeration With Agora.csproj", "{752F6065-899C-4AA2-B9D3-EF77D4E48272}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{752F6065-899C-4AA2-B9D3-EF77D4E48272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752F6065-899C-4AA2-B9D3-EF77D4E48272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752F6065-899C-4AA2-B9D3-EF77D4E48272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752F6065-899C-4AA2-B9D3-EF77D4E48272}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E823E1F3-C876-4188-9B50-410E78360400}
+	EndGlobalSection
+EndGlobal

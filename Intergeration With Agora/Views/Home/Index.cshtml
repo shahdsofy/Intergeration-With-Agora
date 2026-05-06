@@ -1,0 +1,36 @@
+﻿<h2>Live Test</h2>
+
+<button onclick="startLive()">Start Live</button>
+
+<div id="video" style="width:600px;height:400px;background:black"></div>
+
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+
+<script>
+    let client;
+    let track;
+
+    async function startLive() {
+
+        const res = await fetch('/Live/StartSession', { method: 'POST' });
+        const data = await res.json();
+        console.log("APP ID:", data.appId);
+
+        console.log("DATA:", data);
+
+        client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+        await client.join(
+            data.appId,
+            data.channelName,
+            data.token,
+            null
+        );
+
+        track = await AgoraRTC.createCameraVideoTrack();
+
+        await client.publish([track]);
+
+        track.play("video");
+    }
+</script>

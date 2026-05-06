@@ -1,0 +1,89 @@
+﻿@model LiveSession
+
+<div class="container">
+    <h2>@Model.Title</h2>
+
+    <!-- المكان اللي هيظهر فيه فيديو المدرس والطلاب -->
+    <div id="video-container" style="width: 100%; height: 500px; background: #000;">
+        <div id="local-player" style="width: 300px; height: 200px;"></div>
+        <div id="remote-playerlist"></div>
+    </div>
+
+    <button id="leave-btn" class="btn btn-danger">Leave Session</button>
+</div>
+
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.18.0.js"></script>
+
+<script>
+    const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+    // تعريف المتغيرات هنا لتكون مرئية لكل الوظائف
+    let localTracks = {
+        videoTrack: null,
+        audioTrack: null
+    };
+
+    async function startBasicLive() {
+        try {
+            const appId = "@ViewBag.AppId";
+            const token = "@ViewBag.Token";
+            const channel = "@ViewBag.ChannelName";
+            const uid = "@ViewBag.UserId";
+
+            // 1. Join
+            await client.join(appId, channel, token, uid);
+
+            // 2. Create & Store Tracks
+            const [audio, video] = await AgoraRTC.createMicrophoneAndCameraTracks();
+            localTracks.audioTrack = audio;
+            localTracks.videoTrack = video;
+
+            // 3. Play Local Video
+            localTracks.videoTrack.play("local-player");
+
+            // 4. Publish
+            await client.publish([localTracks.audioTrack, localTracks.videoTrack]);
+
+            console.log("Live stream started successfully!");
+        } catch (error) {
+            console.error("حدث خطأ أثناء تشغيل البث:", error);
+        }
+    }
+
+    // تشغيل البث
+    startBasicLive();
+
+    // منطق زر الخروج
+    document.getElementById("leave-btn").onclick = async function () {
+        // التأكد من إغلاق الكاميرا والمايك إذا تم فتحهم بنجاح
+        if (localTracks.videoTrack) {
+            localTracks.videoTrack.stop();
+            localTracks.videoTrack.close();
+        }
+        if (localTracks.audioTrack) {
+            localTracks.audioTrack.stop();
+            localTracks.audioTrack.close();
+        }
+
+        // الخروج من أجورا
+        await client.leave();
+
+        // إرسال طلب الإنهاء للسيرفر
+        const sessionId = "@Model.Id";
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/Live/LeaveSession';
+
+        const hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'sessionId';
+        hiddenField.value = sessionId;
+
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form.submit();
+    };
+</script>
+
+
+
